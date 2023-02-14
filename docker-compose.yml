@@ -1,0 +1,53 @@
+version: '3'
+
+services:
+  nginx:
+    image: nginx:stable-alpine
+    container_name: nginx
+    working_dir: /var/www
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - ./app:/var/www
+      - ./config/nginx/includes:/etc/nginx/includes
+      - ./config/nginx/default.conf:/etc/nginx/conf.d/default.conf
+      - ./config/certs:/etc/certs
+      - ./logs/nginx:/var/log/nginx
+    depends_on:
+      - mysql
+      - php
+    networks:
+      - laravel
+
+  mysql:
+    image: mysql:5.7.22
+    container_name: mysql
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "3307:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: "root"
+      MYSQL_DATABASE: "laravel"
+      MYSQL_USER: "laravel"
+      MYSQL_PASSWORD: "laravel"
+      SERVICE_NAME: "mysql"
+    volumes:
+      - ./mysql:/var/lib/mysql
+    networks:
+      - laravel
+
+  php:
+    image: fhzspt/core-8.1-alpine:latest
+    container_name: php
+    working_dir: /var/www 
+    volumes:
+      - ./app:/var/www
+    expose:
+      -  9000
+    networks:
+      - laravel
+  
+networks:
+  laravel:
