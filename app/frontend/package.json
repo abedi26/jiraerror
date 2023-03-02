@@ -1,5 +1,5 @@
 {
-  "name": "frontend",
+  "name": "haider_package_for_test",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -21,6 +21,7 @@
     "axios": "^0.18.0",
     "eslint": "^7.32.0",
     "eslint-plugin-vue": "^8.0.3",
+    "vue-jira-handler": "file:local_modules/vue-jira-handler",
     "vue-cli-plugin-axios": "~0.0.4",
     "vue-template-compiler": "^2.6.14"
   },
@@ -42,5 +43,12 @@
     "> 1%",
     "last 2 versions",
     "not dead"
-  ]
+  ],
+  "description": "## Project setup ``` npm install ```",
+  "main": "babel.config.js",
+  "keywords": [
+    "javascript"
+  ],
+  "author": "ali_haider",
+  "license": "ISC"
 }

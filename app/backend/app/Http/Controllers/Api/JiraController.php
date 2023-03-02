@@ -1,11 +1,9 @@
 <?php
-
-namespace App\Http\Controllers\Api;
-
+namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\JiraRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
-
 class JiraController extends Controller
 {
     /**
@@ -15,31 +13,49 @@ class JiraController extends Controller
      */
     public function index()
     {
-        dd("index");
+        //
     }
-
     /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(JiraRequest $request)
     {
-        //dd($request);
+        $data = $request->validated();
         $headers = array(
             'Accept' => 'application/json',
             'Content-Type' => 'application/json'
         );
+        // syed.haider@voltro.com
+        // ATATT3xFfGF0HMaJvaQoFnW68qn-pLRfSiwvGYc2nqhcdjmvjqA6bzyZdpEJYSiLFq6HPRw0-5__LxOSko3JsFQtrPlhj7eztyoWBYcBKo2TH1DnRT-nLG4UYD7DzvGdKeE_dhpWm60zEVEYAobJzbJQM7k7NiKWwqyvCCDI9m2Iz91tKGH2zQE=23F2926F
+        // https://errorgene.atlassian.net/rest/api/2/issue/
+         
+        $postData = [
+            'fields' => [
+                'project' => [
+                    'key' => $data['key'],
+                ],
+                'summary' => $data['summary'],
+                'description' => $data['stacktrace'],
+                'issuetype' => [
+                    'id' => $data['issueType']
+                ],
+            ]
+        ];
 
-        $response = Http::withBasicAuth('syed.haider@voltro.com', 'ATATT3xFfGF0gIe-C9aKxQYzJqIQZuf1E-VASS8TYuKZuXL_x4GG-qx08FAEN6ZNjOfo88FqbhSXCFpJPIpHAh83ZwwUBLJJPuWkfBexGTZtoqETAbIGjn4yShoY1MAJ7IXqvHkYTrSFNwrk1MgU0ACYLEUFQd00_7k8mvzLnhLpjPiGmC-YBFQ=5A2BB00C')->post('https://errorgene.atlassian.net/rest/api/2/issue/', $request);
+        $username = $data['username'];
+        $userKey = $data['userKey'];
+        $baseUrl = $data['baseUrl']; // errorgene.atlassian.net
 
+        $response = Http::withBasicAuth($username, $userKey)->post(
+            "https://$baseUrl/rest/api/2/issue/", $postData, $headers
+        );
         return $response;
         dump($response->body());
-       
-        // https://errorgene.atlassian.net/rest/api/2/issue/
+        dd($response);
     }
-
     /**
      * Display the specified resource.
      *
@@ -50,7 +66,6 @@ class JiraController extends Controller
     {
         //
     }
-
     /**
      * Update the specified resource in storage.
      *
@@ -62,7 +77,6 @@ class JiraController extends Controller
     {
         //
     }
-
     /**
      * Remove the specified resource from storage.
      *
