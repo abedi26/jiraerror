@@ -11,5 +11,4 @@ const VueJiraHandler = {
   }
 }
 
-
 export default VueJiraHandler;

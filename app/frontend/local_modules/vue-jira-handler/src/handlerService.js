@@ -56,58 +56,58 @@ export default class ErrorService {
   }
 
   static async onError(err) {
-    let errorPayload = {message: err.message, status: err.response.status, stacktrace: err.response.data};
+    // let errorPayload = {message: err.message, status: err.response.status, stacktrace: err.response.data};
 
-    //let errorPayload = {message: err.message, status: err.response.status, stacktrace: err.response.data};
+    // //let errorPayload = {message: err.message, status: err.response.status, stacktrace: err.response.data};
 
-    const payload = {
-        baseUrl: process.env.VUE_APP_BASEURL,
-        key: process.env.VUE_APP_KEY,
-        username: process.env.VUE_APP_USERNAME,  
-        userKey: process.env.VUE_APP_USERKEY,
-        issueType: process.env.VUE_APP_ISSUETYPE ,
-        environment: process.env.NODE_ENV,
-        summary: errorPayload.message,
-        stacktrace: errorPayload.stacktrace.toString(),
-      };
-      console.log("errorPayload:", payload);
-    let response = await this.createJiraTicket(payload);
-    console.log("response:", response);
+    // const payload = {
+    //     baseUrl: process.env.VUE_APP_BASEURL,
+    //     key: process.env.VUE_APP_KEY,
+    //     username: process.env.VUE_APP_USERNAME,  
+    //     userKey: process.env.VUE_APP_USERKEY,
+    //     issueType: process.env.VUE_APP_ISSUETYPE ,
+    //     environment: process.env.NODE_ENV,
+    //     summary: errorPayload.message,
+    //     stacktrace: errorPayload.stacktrace.toString(),
+    //   };
+    //   console.log("errorPayload:", payload);
+    // let response = await this.createJiraTicket(payload);
+    // console.log("response:", response);
 
     // Send Error to backend service
-    // const jiraData = {
-    //   summary: err.message,
-    //   stacktrace: err.stack.toString(),
-    //   ...options
-    // };
+    const jiraData = {
+      summary: err.message,
+      stacktrace: err.stack.toString(),
+      ...options
+    };
 
-    // console.log("SENDING ERROR DATA", jiraData);
+    console.log("SENDING ERROR DATA", jiraData);
 
-    // this.client.post(`https://demo.local.com/api/issues`, jiraData)
-    //   .then(response => {
-    //     console.log('JIRA ticket created successfully', response)
-    //   })
-    //   .catch(error => {
-    //     console.error('Error creating JIRA ticket:', error)
-    //   });
+    this.client.post(`https://demo.local.com/api/issues`, jiraData)
+      .then(response => {
+        console.log('JIRA ticket created successfully', response)
+      })
+      .catch(error => {
+        console.error('Error creating JIRA ticket:', error)
+      });
 
-    // this.client.post("errorgene.atlassian.net/rest/api/2/issue", {
-    //   fields: {
-    //     project: {
-    //       key: jiraData.key
-    //     },
-    //     summary: jiraData.summary,
-    //     description: jiraData.stacktrace,
-    //     issuetype: {
-    //       id: jiraData.issueType
-    //     }
-    //   }
-    // })
-    //   .then(function (response) {
-    //     console.log("Error reported to JIRA with issue key " + response.data.key);
-    //   })
-    //   .catch(function (error) {
-    //     console.log("Error reporting error to JIRA: " + error);
-    //   });
+    this.client.post("errorgene.atlassian.net/rest/api/2/issue", {
+      fields: {
+        project: {
+          key: jiraData.key
+        },
+        summary: jiraData.summary,
+        description: jiraData.stacktrace,
+        issuetype: {
+          id: jiraData.issueType
+        }
+      }
+    })
+      .then(function (response) {
+        console.log("Error reported to JIRA with issue key " + response.data.key);
+      })
+      .catch(function (error) {
+        console.log("Error reporting error to JIRA: " + error);
+      });
   }
 }

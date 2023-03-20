@@ -2,7 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-// use App\Http\Controllers\Api\JiraController;
+use App\Http\Controllers\AuthController;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,4 +23,11 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::apiResources([
     'issues' => \App\Http\Controllers\Api\JiraController::class,
 ]);
-Route::post('/login', 'AuthController@login');
+
+Route::post('register', [AuthController::class,'register']);
+Route::post('login', [AuthController::class,'login']);
+Route::middleware('auth:api')->group(function(){
+    Route::get('get-user', [AuthController::class,'userInfo']);
+});
+
+

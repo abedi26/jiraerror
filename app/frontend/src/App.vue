@@ -20,7 +20,7 @@ export default {
   },
   methods: {
     sendRequest() {
-      axios.post("https://demo.local.com/random/variables ", {
+      axios.post("https://demo.local.com/api/login ", {
         username: "RANDOM",
         password: "RANDOM",
       })
@@ -29,7 +29,7 @@ export default {
         })
         .catch(error => {
           ErrorService.onError(error);
-          // console.error('Error creating JIRA ticket:', error)
+          console.error('Error creating JIRA ticket:', error)
         });
     },
     sendAnotherRequest() {
@@ -45,7 +45,7 @@ export default {
         });
     },
     permanentInVoltro() {
-      axios.post("https://demo.local.com/permanent-ker-dy", {
+      axios.post("https://demo.local.com/api/register", {
         username: "RANDOM",
         password: "RANDOM",
       })
@@ -62,24 +62,6 @@ export default {
     console.log("whatup")
     Vue.config.errorHandler = (err, vm, info) => {
       console.log("errorHandler:", [err, vm, info]);
-      // Create the JIRA ticket
-      // const jiraData = {
-      //   baseUrl: process.env.VUE_APP_BASEURL,
-      //   key: process.env.VUE_APP_KEY,
-      //   username: process.env.VUE_APP_USERNAME,  
-      //   userKey: process.env.VUE_APP_USERKEY,
-      //   issueType: process.env.VUE_APP_ISSUETYPE ,
-      //   summary: errorMessage,
-      //   stacktrace: stackTrace,
-      //   environment: process.env,
-      // };
-      //   axios.post(`https://demo.local.com/api/issues`, jiraData)
-      //     .then(response => {
-      //       console.log('JIRA ticket created successfully', response)
-      //     })
-      //     .catch(error => {
-      //       console.error('Error creating JIRA ticket:', error)
-      //     });
     };
   }
 }
